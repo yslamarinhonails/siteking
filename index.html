@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King.dev - Encomendar Site</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. RESET E BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body, html { height: 100%; width: 100%; background-color: #050505; color: #fff; font-family: 'Playfair Display', serif; overflow: hidden; }
+
+        /* 2. FUNDO E NÉVOA (COMPARTILHADO) */
+        #scene-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), 
+                        url('https://i.pinimg.com/originals/9e/7b/03/9e7b038031d683a48e7e179e60749007.jpg');
+            background-size: cover; background-position: center; z-index: 1; filter: grayscale(10%) brightness(70%);
+        }
+        #scene-container::after {
+            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
+            animation: driftMist 20s ease-in-out infinite alternate; pointer-events: none;
+        }
+
+        /* 3. CABEÇALHO FIXO */
+        header {
+            position: fixed; top: 0; width: 100%; height: 90px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 50px; z-index: 1000;
+        }
+        .mini-logo { font-family: 'Cinzel Decorative', serif; font-size: 24px; color: #fff; text-decoration: none; letter-spacing: 2px; }
+        .social-icons { display: flex; gap: 18px; }
+        .social-icons svg { width: 20px; height: 20px; fill: #fff; transition: 0.3s; }
+        .social-icons a:hover svg { fill: #5cf2e3; transform: translateY(-3px); }
+
+        /* 4. SEÇÕES E TRANSIÇÃO */
+        .page-section {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; align-items: center; transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 10; padding: 0 8%;
+        }
+        .hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+        .visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+        /* 5. PÁGINA INICIAL */
+        #home h1 { font-family: 'Cinzel Decorative', serif; font-size: clamp(40px, 8vw, 90px); animation: pulseGlow 4s infinite; }
+        #home p { font-size: 14px; color: #aaa; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
+
+        /* 6. PÁGINA ENCOMENDAR (NOVA!) */
+        #encomendar { justify-content: flex-start; overflow-y: auto; padding-top: 120px; padding-bottom: 50px; }
+        .order-card {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 40px; border-left: 2px solid #5cf2e3;
+            max-width: 700px; border-radius: 0 20px 20px 0;
+            box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+        }
+        .mimikyu-gif { width: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px #5cf2e3); }
+        .order-card h2 { font-family: 'Cinzel Decorative', serif; color: #5cf2e3; margin-bottom: 20px; }
+        .order-text { line-height: 1.6; color: #ddd; font-size: 15px; }
+        .highlight { color: #5cf2e3; font-weight: bold; }
+        
+        .btn-whatsapp {
+            display: inline-block; margin-top: 30px; padding: 15px 30px;
+            background: #25d366; color: #fff; text-decoration: none;
+            border-radius: 50px; font-weight: bold; text-transform: uppercase;
+            letter-spacing: 1px; transition: 0.3s;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+        }
+        .btn-whatsapp:hover { transform: scale(1.05); background: #1ebd58; box-shadow: 0 0 30px rgba(37, 211, 102, 0.5); }
+
+        /* 7. MENU LATERAL */
+        #side-menu {
+            position: fixed; right: 0; width: 350px; height: 100%;
+            background: linear-gradient(to left, rgba(0, 0, 0, 0.85), transparent);
+            backdrop-filter: blur(12px); display: flex; flex-direction: column;
+            justify-content: center; padding-right: 50px; z-index: 500;
+        }
+        #side-menu ul { list-style: none; display: flex; flex-direction: column; align-items: flex-end; gap: 30px; }
+        #side-menu a { text-decoration: none; color: #bbb; font-size: 18px; transition: 0.4s; }
+        #side-menu a:hover, #side-menu a.active { color: #5cf2e3; padding-right: 10px; }
+
+        /* ANIMAÇÕES */
+        @keyframes driftMist { 0% { transform: translate(0, 0); opacity: 0.4; } 100% { transform: translate(5%, 5%); opacity: 0.6; } }
+        @keyframes pulseGlow { 0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.2); } 50% { text-shadow: 0 0 30px rgba(92, 242, 227, 0.4); } }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            #side-menu { width: 100%; height: auto; bottom: 0; background: rgba(0,0,0,0.95); padding: 20px 0; }
+            #side-menu ul { align-items: center; flex-direction: row; justify-content: center; gap: 15px; }
+            #side-menu a { font-size: 12px; }
+            .order-card { padding: 20px; border-radius: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scene-container"></div>
+
+    <header>
+        <a href="javascript:void(0)" onclick="showPage('home')" class="mini-logo">King.dev</a>
+        <div class="social-icons">
+            <a href="#" title="Instagram"><svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.9c-41.4 0-75-33.6-75-75s33.6-75 75-75 75 33.6 75 75-33.6 75-75 75zm144.2-226.1c0-14.9-12.1-27-27-27s-27 12.1-27 27 12.1 27 27 27 27-12.1 27-27zm137.7 219.2c0 209.5-255.9 209.5-255.9 209.5S0 465.4 0 255.9 255.9 46.4 255.9 46.4s255.9 0 255.9 209.5z"/></svg></a>
+            <a href="#" title="TikTok"><svg viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg></a>
+            <a href="#" title="WhatsApp"><svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.2-3.2-5.6-.3-8.6 2.4-11.3 2.5-2.4 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.6 5.5-9.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.3 5.7 23.6 9.1 31.7 11.7 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></a>
+            <a href="#" title="YouTube"><svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597C16 166.713 16 256 16 256s0 89.287 10.345 131.917c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.781 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821C560 345.287 560 256 560 256s0-89.287-10.345-131.917zM232 337.643V174.357L374.364 256 232 337.643z"/></svg></a>
+        </div>
+    </header>
+
+    <!-- Página Inicial -->
+    <section id="home" class="page-section visible">
+        <div>
+            <h1>King.dev</h1>
+            <p>A King.dev Production™</p>
+        </div>
+    </section>
+
+    <!-- Página Encomendar Site -->
+    <section id="encomendar" class="page-section hidden">
+        <div class="order-card">
+            <img src="https://media.rawgit.com/msikma/pokesprite/master/pokemon-gen8/shiny/mimikyu.png" alt="Mimikyu Shiny" class="mimikyu-gif">
+            <h2>Seu Site, Seu Estilo.</h2>
+            <div class="order-text">
+                <p>🚀 <span class="highlight">Tenha seu site personalizado por um preço acessível!</span></p><br>
+                <p>Se você quer marcar presença online de forma simples, bonita e profissional, eu tenho a solução ideal para você.</p><br>
+                <p>Ofereço sites simples e totalmente personalizados, perfeitos para quem deseja reunir todos os seus links importantes em um só lugar — como WhatsApp, Instagram, TikTok e outras redes sociais.</p><br>
+                <p class="highlight">💻 O que você recebe:</p>
+                <p>• Página única com seus direcionamentos principais<br>
+                   • Design personalizado de acordo com sua identidade<br>
+                   • Layout moderno e responsivo<br>
+                   • Organização prática para seus clientes</p><br>
+                <p>💰 <span class="highlight">Valor inicial: R$50,00</span><br>
+                O preço pode variar conforme o nível de personalização solicitado.</p><br>
+                <p>📩 Entre em contato e vamos criar algo único para você.</p>
+            </div>
+            <a href="https://wa.me/5591999641330?text=Olá,%20vim%20pelo%20site,%20me%20interessei%20e%20quero%20encomendar%20um%20site." target="_blank" class="btn-whatsapp">
+                Chamar no WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- Menu Lateral -->
+    <nav id="side-menu">
+        <ul>
+            <li><a href="javascript:void(0)" onclick="showPage('encomendar')" id="link-encomendar">Encomendar site</a></li>
+            <li><a href="#">Redes sociais</a></li>
+            <li><a href="#">Sobre meu trabalho</a></li>
+            <li><a href="#">Negociar projeto</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        function showPage(pageId) {
+            // Esconde todas as seções
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('visible');
+                section.classList.add('hidden');
+            });
+
+            // Mostra a seção desejada
+            const activeSection = document.getElementById(pageId);
+            activeSection.classList.remove('hidden');
+            activeSection.classList.add('visible');
+
+            // Atualiza o estado do menu
+            document.querySelectorAll('#side-menu a').forEach(link => link.classList.remove('active'));
+            if(pageId === 'encomendar') {
+                document.getElementById('link-encomendar').classList.add('active');
+            }
+        }
+    </script>
+
+</body>
+</html>
